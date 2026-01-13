@@ -4,10 +4,15 @@ A terminal-based note taking application built with **ASCII Driven Development**
 
 ```
 +===========================================================================+
-|                         NOTES TUI                                        |
-|              A Terminal-Based Note Taking Application                    |
-|                                                                          |
-|                Built with ASCII Driven Development                       |
+|  󰎚 NOTES TUI                                       󰋖 Help  󰗼 Quit       |
++===========================================================================+
+|                          |                                                |
+|   NOTEBOOKS             |  󰎞 NOTES                                        |
+|  +-----------------+     |  +---------------------------------------------+
+|  |  Default    (5)|     |  | 󰎞 My First Note               2026-01-14  |
+|  |   Work       (3)|     |  | 󰎞 Shopping List               2026-01-13  |
+|  +-----------------+     |  +---------------------------------------------+
+|                          |                                                |
 +===========================================================================+
 ```
 
@@ -16,14 +21,17 @@ A terminal-based note taking application built with **ASCII Driven Development**
 - Create, edit, and delete notes
 - Organize notes in notebooks
 - Search notes by title and content
-- Full keyboard navigation
+- Full keyboard navigation (vim-style)
 - Persistent JSON storage
-- Clean, ASCII-based interface
+- **Nerd Font icons** with Unicode/ASCII fallback
+- Double-buffered rendering (no flicker)
+- Clean, modern TUI interface
 
 ## Requirements
 
 - Python 3.8+
 - Unix-like terminal (macOS, Linux)
+- **Recommended:** Terminal with [Nerd Font](https://www.nerdfonts.com/) for best icon display
 
 ## Installation
 
@@ -41,6 +49,28 @@ python -m src.main
 
 # Or specify a custom data path
 python -m src.main --data-path /path/to/notes.json
+
+# Force specific icon mode
+NOTES_TUI_ICONS=ascii python -m src.main   # ASCII fallback
+NOTES_TUI_ICONS=unicode python -m src.main  # Unicode icons
+NOTES_TUI_ICONS=nerd python -m src.main     # Nerd Font icons (default)
+```
+
+## Icon Support
+
+Notes TUI supports three icon modes:
+
+| Mode | Description | Example |
+|------|-------------|---------|
+| `nerd` | Nerd Font icons (default) | 󰎚 󰎞  󰍉 |
+| `unicode` | Standard Unicode symbols | 📓 📝 📁 🔍 |
+| `ascii` | Plain ASCII fallback | [N] * [D] / |
+
+Set the `NOTES_TUI_ICONS` environment variable to change modes:
+```bash
+export NOTES_TUI_ICONS=nerd    # Best visuals (requires Nerd Font)
+export NOTES_TUI_ICONS=unicode # Good fallback for most terminals
+export NOTES_TUI_ICONS=ascii   # Works everywhere
 ```
 
 ## Keyboard Shortcuts
@@ -165,9 +195,10 @@ notes-tui/
 |   |   +-- repository.py    # Data persistence
 |   |
 |   +-- tui/
-|       +-- screen.py        # Terminal screen handling
-|       +-- renderer.py      # UI rendering
+|       +-- screen.py        # Terminal screen (double-buffered)
+|       +-- renderer.py      # UI rendering with icons
 |       +-- input_handler.py # Keyboard input
+|       +-- icons.py         # Nerd Font/Unicode/ASCII icons
 |
 +-- data/
 |   +-- notes.json           # Persistent storage
